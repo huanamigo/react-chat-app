@@ -3,7 +3,7 @@ import styles from './Search.module.scss';
 const Search = () => {
   return (
     <div className={styles.container}>
-      <input type="text" />
+      <input type="text" placeholder="Search" />
     </div>
   );
 };
