@@ -1,8 +1,9 @@
 import styles from './Register.module.scss';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth, storage } from '../../Firebase';
+import { auth, storage, db } from '../../Firebase';
 import { useState } from 'react';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { doc, setDoc } from 'firebase/firestore';
 
 const Register = () => {
   const [error, setError] = useState('');
@@ -10,7 +11,7 @@ const Register = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log((e.currentTarget[0] as HTMLInputElement).value);
-    const username = (e.currentTarget[0] as HTMLInputElement).value;
+    const displayName = (e.currentTarget[0] as HTMLInputElement).value;
     const email = (e.currentTarget[1] as HTMLInputElement).value;
     const password = (e.currentTarget[2] as HTMLInputElement).value;
     const file = (e.currentTarget[4] as HTMLInputElement).value;
@@ -18,25 +19,36 @@ const Register = () => {
     try {
       const res = createUserWithEmailAndPassword(auth, email, password);
 
-      const storageRef = ref(storage, username);
+      const storageRef = ref(storage, displayName);
 
       const uploadTask = uploadBytesResumable(storageRef, file);
 
       uploadTask.on(
-        // (error: any) => {
-        //   setError(String(error));
-        // },
+        (error: any) => {
+          setError(String(error));
+        },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
             await updateProfile((await res).user, {
-              displayName: username,
+              displayName: displayName,
+              photoURL: downloadURL,
+            });
+
+            console.log('ASDASD');
+
+            await setDoc(doc(db, 'users', (await res).user.uid), {
+              uid: (await res).user.uid,
+              displayName,
+              email,
               photoURL: downloadURL,
             });
           });
         }
       );
+      setError('');
     } catch (error) {
       setError(String(error));
+      console.log(error);
     }
   };
 
@@ -49,7 +61,9 @@ const Register = () => {
         <input type="new-password" placeholder="Confirm password" />
         <input type="file" />
         <button>Sign Up</button>
-        {error !== '' && <span>Something went wrong</span>}
+        {error !== '' && (
+          <span className={styles.error}>Something went wrong</span>
+        )}
       </form>
     </div>
   );
