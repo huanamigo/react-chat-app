@@ -4,6 +4,8 @@ import { auth, storage, db } from '../../Firebase';
 import { useState } from 'react';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { doc, setDoc } from 'firebase/firestore';
+import { NavLink } from 'react-router-dom';
+import Login from '../Login/Login';
 
 const Register = () => {
   const [error, setError] = useState('');
@@ -65,6 +67,9 @@ const Register = () => {
           <span className={styles.error}>Something went wrong</span>
         )}
       </form>
+      <p>
+        Already have an account? <NavLink to="/login">Log In</NavLink>
+      </p>
     </div>
   );
 };
