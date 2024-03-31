@@ -7,11 +7,10 @@ const Login = () => {
       <form>
         <input type="email" placeholder="E-mail" />
         <input type="password" placeholder="Password" />
-        <input type="file" />
         <button>Login</button>
       </form>
       <p>
-        Don't have an account? <NavLink to="/register">Log In</NavLink>
+        Don't have an account? <NavLink to="/register">Sign Up</NavLink>
       </p>
     </div>
   );
