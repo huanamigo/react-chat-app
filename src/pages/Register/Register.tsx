@@ -4,11 +4,11 @@ import { auth, storage, db } from '../../Firebase';
 import { useState } from 'react';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { doc, setDoc } from 'firebase/firestore';
-import { NavLink } from 'react-router-dom';
-import Login from '../Login/Login';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,6 +44,8 @@ const Register = () => {
               email,
               photoURL: downloadURL,
             });
+            await setDoc(doc(db, 'userChats', (await res).user.uid), {});
+            navigate('../', { replace: true });
           });
         }
       );
