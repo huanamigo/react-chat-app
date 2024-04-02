@@ -26,9 +26,9 @@ const Register = () => {
       const uploadTask = uploadBytesResumable(storageRef, file);
 
       uploadTask.on(
-        (error: any) => {
-          setError(String(error));
-        },
+        // (error: any) => {
+        //   setError(String(error));
+        // },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
             await updateProfile((await res).user, {
