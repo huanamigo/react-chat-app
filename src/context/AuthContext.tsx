@@ -12,10 +12,14 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const [currentUser, setCurrentUser] = useState({});
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsub = onAuthStateChanged(auth, (user) => {
       user && setCurrentUser(user);
       console.log(user);
     });
+
+    return () => {
+      unsub();
+    };
   }, [currentUser]);
 
   return (

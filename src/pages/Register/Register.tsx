@@ -16,27 +16,23 @@ const Register = () => {
     const displayName = (e.currentTarget[0] as HTMLInputElement).value;
     const email = (e.currentTarget[1] as HTMLInputElement).value;
     const password = (e.currentTarget[2] as HTMLInputElement).value;
-    const file = (e.currentTarget[4] as HTMLInputElement).value;
+    const fileInput = e.currentTarget[4] as HTMLInputElement;
+    const file = fileInput.files ? fileInput.files[0] : null;
 
     try {
       const res = createUserWithEmailAndPassword(auth, email, password);
 
       const storageRef = ref(storage, displayName);
 
-      const uploadTask = uploadBytesResumable(storageRef, file);
+      if (file) {
+        const uploadTask = uploadBytesResumable(storageRef, file);
 
-      uploadTask.on(
-        // (error: any) => {
-        //   setError(String(error));
-        // },
-        () => {
+        uploadTask.on('state_changed', () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
             await updateProfile((await res).user, {
               displayName: displayName,
               photoURL: downloadURL,
             });
-
-            console.log('ASDASD');
 
             await setDoc(doc(db, 'users', (await res).user.uid), {
               uid: (await res).user.uid,
@@ -47,8 +43,8 @@ const Register = () => {
             await setDoc(doc(db, 'userChats', (await res).user.uid), {});
             navigate('../', { replace: true });
           });
-        }
-      );
+        });
+      }
       setError('');
     } catch (error) {
       setError(String(error));
