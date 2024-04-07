@@ -4,17 +4,20 @@ import { auth } from '../Firebase';
 
 export const AuthContext = createContext({
   currentUser: {},
+  isLoading: true,
 });
 
 export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [currentUser, setCurrentUser] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       user && setCurrentUser(user);
-      console.log(user);
+      setIsLoading(false);
+      // console.log(user);
     });
 
     return () => {
@@ -23,7 +26,7 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [currentUser]);
 
   return (
-    <AuthContext.Provider value={{ currentUser }}>
+    <AuthContext.Provider value={{ currentUser, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

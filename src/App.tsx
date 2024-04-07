@@ -7,35 +7,31 @@ import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
 
 interface ProtectedRouteProps {
-  authenticationPath: string;
   outlet: JSX.Element;
 }
 
 function App() {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, isLoading } = useContext(AuthContext);
   console.log(currentUser);
+  console.log(isLoading);
 
-  const ProtectedRoute = ({
-    authenticationPath,
-    outlet,
-  }: ProtectedRouteProps) => {
+  if (isLoading) {
+    return <div className={styles.loadingScreen}>Loading...</div>;
+  }
+
+  const ProtectedRoute = ({ outlet }: ProtectedRouteProps) => {
     // ????????????????//
     if ('email' in currentUser) {
       return outlet;
     } else {
-      return <Navigate to={{ pathname: authenticationPath }} />;
+      return <Navigate to={{ pathname: '/login' }} />;
     }
   };
 
   return (
     <div className={styles.container}>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute authenticationPath="/login" outlet={<Home />} />
-          }
-        />
+        <Route path="/" element={<ProtectedRoute outlet={<Home />} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
       </Routes>
