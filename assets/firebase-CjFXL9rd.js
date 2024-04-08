@@ -1,4 +1,4 @@
-import{r}from"./@firebase-SVGPPxer.js";var e="firebase",a="10.9.0";/**
+import{r}from"./@firebase-BOpatifW.js";var e="firebase",a="10.9.0";/**
  * @license
  * Copyright 2020 Google LLC
  *
