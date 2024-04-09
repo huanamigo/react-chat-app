@@ -60,9 +60,9 @@ const Register = () => {
                   photoURL: downloadURL,
                 });
                 await setDoc(doc(db, 'userChats', (await res).user.uid), {});
-                navigate('../', { replace: true });
               }
             );
+            navigate('../', { replace: true });
           }
         );
       }
