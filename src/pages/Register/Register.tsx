@@ -75,10 +75,18 @@ const Register = () => {
   return (
     <div className={styles.container}>
       <form onSubmit={(e) => handleSubmit(e)}>
-        <input type="text" placeholder="Username" />
-        <input type="email" placeholder="E-mail" />
-        <input type="new-password" placeholder="Password" />
-        <input type="new-password" placeholder="Confirm password" />
+        <input type="text" autoComplete="username" placeholder="Username" />
+        <input type="email" autoComplete="email" placeholder="E-mail" />
+        <input
+          type="password"
+          autoComplete="new-password"
+          placeholder="Password"
+        />
+        <input
+          type="password"
+          autoComplete="new-password"
+          placeholder="Confirm password"
+        />
         <input type="file" />
         <button>Sign Up</button>
         {error !== '' && (

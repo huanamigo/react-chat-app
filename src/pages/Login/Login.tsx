@@ -32,8 +32,12 @@ const Login = () => {
   return (
     <div className={styles.container}>
       <form onSubmit={(e) => handleSubmit(e)}>
-        <input type="email" placeholder="E-mail" />
-        <input type="password" placeholder="Password" />
+        <input type="email" autoComplete="email" placeholder="E-mail" />
+        <input
+          type="password"
+          autoComplete="current-password"
+          placeholder="Password"
+        />
         <button>Login</button>
         {error !== '' && (
           <span className={styles.error}>Something went wrong</span>

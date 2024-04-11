@@ -4,9 +4,12 @@ import Search from './Search.tsx/Search';
 import styles from './Sidebar.module.scss';
 import { auth } from '../../Firebase';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const { currentUser } = useContext(AuthContext);
 
   return (
     <div className={styles.container}>
@@ -25,6 +28,8 @@ const Sidebar = () => {
         >
           Logout
         </button>
+        <img src={currentUser.photoURL} alt={currentUser.displayName} />
+        <span>{currentUser.displayName}</span>
       </div>
       <Search />
       <Chats
