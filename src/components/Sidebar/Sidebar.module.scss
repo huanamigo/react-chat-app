@@ -1,4 +1,27 @@
 .container {
   background-color: rgb(33, 33, 33);
   width: 25vw;
+
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+
+    .logoutBtn {
+      margin: 15px;
+      border: none;
+      background-color: black;
+      color: white;
+      cursor: pointer;
+    }
+
+    img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 15px;
+    }
+  }
 }

@@ -7,14 +7,24 @@ import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 
+interface UserType {
+  currentUser: {
+    photoURL?: string;
+    displayName?: string;
+  };
+}
+
 const Sidebar = () => {
   const navigate = useNavigate();
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser }: UserType = useContext(AuthContext);
 
   return (
     <div className={styles.container}>
       <div className={styles.navbar}>
+        <img src={currentUser?.photoURL} alt={currentUser.displayName} />
+        <span>{currentUser.displayName}</span>
         <button
+          className={styles.logoutBtn}
           onClick={() => {
             signOut(auth)
               .then(() => {
@@ -28,8 +38,6 @@ const Sidebar = () => {
         >
           Logout
         </button>
-        <img src={currentUser.photoURL} alt={currentUser.displayName} />
-        <span>{currentUser.displayName}</span>
       </div>
       <Search />
       <Chats

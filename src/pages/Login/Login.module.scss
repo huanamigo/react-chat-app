@@ -1,3 +1,5 @@
+@import '../../variables.scss';
+
 .container {
   height: 100vh;
   background-color: black;
@@ -16,12 +18,18 @@
       border: none;
       color: white;
       margin: 1rem;
+      padding: 1rem;
+    }
+
+    button {
+      background-color: $mainColor;
     }
   }
 
   .error {
     color: white;
   }
+
   p {
     color: white;
   }
