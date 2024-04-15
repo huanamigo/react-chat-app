@@ -1,11 +1,12 @@
-// import { useState } from 'react';
 import styles from './Search.module.scss';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../../Firebase';
+import { useState } from 'react';
 
 const Search = () => {
   // const [userQuery, setUserQuery] = useState('');
   // const [user, setUser] = useState(null);
+  const [searchError, setSearchError] = useState('');
 
   const handleSearch = async (userQuery: string) => {
     console.log(userQuery);
@@ -20,6 +21,7 @@ const Search = () => {
         console.log(doc.data());
       });
     } catch (error) {
+      setSearchError(String(error));
       console.log(error);
     }
   };
@@ -34,6 +36,7 @@ const Search = () => {
           handleSearch(e.target.value);
         }}
       />
+      {searchError !== '' && <p>{searchError}</p>}
     </div>
   );
 };
