@@ -4,7 +4,7 @@ import Search from './Search.tsx/Search';
 import styles from './Sidebar.module.scss';
 import { auth } from '../../Firebase';
 import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 
 interface UserType {
@@ -17,6 +17,11 @@ interface UserType {
 const Sidebar = () => {
   const navigate = useNavigate();
   const { currentUser }: UserType = useContext(AuthContext);
+  const [searchedUser, setSearchedUser] = useState({
+    username: '',
+    img: '',
+    lastMessage: '',
+  });
 
   return (
     <div className={styles.container}>
@@ -39,7 +44,14 @@ const Sidebar = () => {
           Logout
         </button>
       </div>
-      <Search />
+      <Search setSearchedUser={setSearchedUser} />
+      {searchedUser.username !== '' && (
+        <Chats
+          username={searchedUser.username}
+          img={searchedUser.img}
+          lastMessage={searchedUser.lastMessage}
+        />
+      )}
       <Chats
         username="janek"
         img="https://source.unsplash.com/random"
