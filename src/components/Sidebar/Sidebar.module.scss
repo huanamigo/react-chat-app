@@ -1,18 +1,20 @@
+@import '../../variables.scss';
+
 .container {
-  background-color: rgb(33, 33, 33);
+  background-color: $secondaryBackground;
   width: 25vw;
 
   .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: white;
+    color: $whiteText;
 
     .logoutBtn {
       margin: 15px;
       border: none;
-      background-color: black;
-      color: white;
+      background-color: $blackBackground;
+      color: $whiteText;
       cursor: pointer;
     }
 

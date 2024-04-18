@@ -1,9 +1,11 @@
+@import '../../../variables.scss';
+
 .container {
   input {
     width: 100%;
     border: none;
     outline: none;
-    background-color: rgb(24, 24, 24);
+    background-color: $inputBackground;
     color: white;
     padding: 0.8rem;
     font-size: larger;
