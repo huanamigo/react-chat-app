@@ -4,15 +4,22 @@ interface IProps {
   username: string;
   img: string;
   lastMessage: string;
+  isSearched?: boolean;
 }
 
-const Chats = ({ username, img, lastMessage }: IProps) => {
+const Chats = ({ username, img, lastMessage, isSearched }: IProps) => {
   return (
     <div className={styles.container}>
       <img src={img} />
       <div className={styles.wrapper}>
-        <p className={styles.username}>{username}</p>
-        <p className={styles.message}>{lastMessage}</p>
+        {isSearched ? (
+          <p className={styles.username}>{username}</p>
+        ) : (
+          <>
+            <p className={styles.username}>{username}</p>
+            <p className={styles.message}>{lastMessage}</p>
+          </>
+        )}
       </div>
     </div>
   );

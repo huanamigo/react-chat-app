@@ -50,6 +50,7 @@ const Sidebar = () => {
           username={searchedUser.username}
           img={searchedUser.img}
           lastMessage={searchedUser.lastMessage}
+          isSearched={true}
         />
       )}
       <Chats

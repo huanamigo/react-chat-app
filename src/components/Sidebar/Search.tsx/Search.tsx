@@ -19,20 +19,27 @@ const Search = ({ setSearchedUser }: IProps) => {
   const [searchError, setSearchError] = useState('');
 
   const handleSearch = async (userQuery: string) => {
-    console.log(userQuery);
     const q = query(collection(db, 'users'), where('email', '==', userQuery));
 
     try {
       const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        console.log(doc.data());
-        const docData = doc.data();
-        setSearchedUser({
-          username: docData.displayName,
-          img: docData.photoURL,
-          lastMessage: '???',
+      console.log(querySnapshot.docs.length);
+      if (querySnapshot.docs.length > 0) {
+        querySnapshot.forEach((doc) => {
+          const docData = doc.data();
+          setSearchedUser({
+            username: docData.displayName,
+            img: docData.photoURL,
+            lastMessage: '???',
+          });
         });
-      });
+      } else {
+        setSearchedUser({
+          username: '',
+          img: '',
+          lastMessage: '',
+        });
+      }
     } catch (error) {
       setSearchError(String(error));
       console.log(error);
