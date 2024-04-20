@@ -9,6 +9,7 @@ interface IProps {
       username: string;
       img: string;
       lastMessage: string;
+      uid: string;
     }>
   >;
 }
@@ -27,10 +28,12 @@ const Search = ({ setSearchedUser }: IProps) => {
       if (querySnapshot.docs.length > 0) {
         querySnapshot.forEach((doc) => {
           const docData = doc.data();
+          console.log(docData);
           setSearchedUser({
             username: docData.displayName,
             img: docData.photoURL,
             lastMessage: '???',
+            uid: docData.uid,
           });
         });
       } else {
@@ -38,6 +41,7 @@ const Search = ({ setSearchedUser }: IProps) => {
           username: '',
           img: '',
           lastMessage: '',
+          uid: '',
         });
       }
     } catch (error) {

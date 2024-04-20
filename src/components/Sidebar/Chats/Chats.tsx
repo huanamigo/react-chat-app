@@ -1,26 +1,52 @@
+import { useContext } from 'react';
 import styles from './Chats.module.scss';
+import { AuthContext } from '../../../context/AuthContext';
 
 interface IProps {
-  username: string;
-  img: string;
-  lastMessage: string;
   isSearched?: boolean;
+  chatUser: {
+    username: string;
+    img: string;
+    lastMessage: string;
+    uid: string;
+  };
 }
 
-const Chats = ({ username, img, lastMessage, isSearched }: IProps) => {
+interface UserType {
+  currentUser: {
+    photoURL?: string;
+    displayName?: string;
+    uid?: string;
+  };
+}
+
+const Chats = ({ chatUser, isSearched }: IProps) => {
+  const { currentUser }: UserType = useContext(AuthContext);
+
+  const handleSelect = async () => {
+    if (currentUser.uid !== '' && currentUser.uid !== undefined) {
+      const combinedId =
+        currentUser.uid > chatUser.uid
+          ? currentUser.uid + chatUser.uid
+          : chatUser.uid + currentUser.uid;
+      console.log(combinedId);
+    }
+    console.log(currentUser.uid + chatUser.uid);
+  };
+
   return (
     <div className={styles.container}>
-      <img src={img} />
-      <div className={styles.wrapper}>
-        {isSearched ? (
-          <p className={styles.username}>{username}</p>
-        ) : (
-          <>
-            <p className={styles.username}>{username}</p>
-            <p className={styles.message}>{lastMessage}</p>
-          </>
-        )}
-      </div>
+      <img src={chatUser.img} />
+      {isSearched ? (
+        <div onClick={() => handleSelect()} className={styles.wrapper}>
+          <p className={styles.username}>{chatUser.username}</p>
+        </div>
+      ) : (
+        <div className={styles.wrapper}>
+          <p className={styles.username}>{chatUser.username}</p>
+          <p className={styles.message}>{chatUser.lastMessage}</p>
+        </div>
+      )}
     </div>
   );
 };

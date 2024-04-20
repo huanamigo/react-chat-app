@@ -21,6 +21,14 @@ const Sidebar = () => {
     username: '',
     img: '',
     lastMessage: '',
+    uid: '',
+  });
+
+  const [tempUser] = useState({
+    username: 'temp',
+    img: 'https://source.unsplash.com/random',
+    lastMessage: 'jazda',
+    uid: 'qwertyuioQWERTYUIO',
   });
 
   return (
@@ -46,38 +54,9 @@ const Sidebar = () => {
       </div>
       <Search setSearchedUser={setSearchedUser} />
       {searchedUser.username !== '' && (
-        <Chats
-          username={searchedUser.username}
-          img={searchedUser.img}
-          lastMessage={searchedUser.lastMessage}
-          isSearched={true}
-        />
+        <Chats chatUser={searchedUser} isSearched={true} />
       )}
-      <Chats
-        username="janek"
-        img="https://source.unsplash.com/random"
-        lastMessage="brudka"
-      />
-      <Chats
-        username="janek"
-        img="https://source.unsplash.com/random"
-        lastMessage="brudka"
-      />
-      <Chats
-        username="janek"
-        img="https://source.unsplash.com/random"
-        lastMessage="brudka"
-      />
-      <Chats
-        username="janek"
-        img="https://source.unsplash.com/random"
-        lastMessage="brudka"
-      />
-      <Chats
-        username="janek"
-        img="https://source.unsplash.com/random"
-        lastMessage="brudka"
-      />
+      <Chats chatUser={tempUser} />
     </div>
   );
 };
