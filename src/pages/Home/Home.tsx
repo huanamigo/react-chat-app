@@ -11,7 +11,11 @@ const Home = () => {
   console.log(isLoading);
 
   if (isLoading) {
-    return <div className={styles.loading}>Loading...</div>;
+    return (
+      <div className={styles.loadingScreen}>
+        <span className={styles.loader}></span>
+      </div>
+    );
   } else if ('email' in currentUser) {
     return (
       <div className={styles.container}>
