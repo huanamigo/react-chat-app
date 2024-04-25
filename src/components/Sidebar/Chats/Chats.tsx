@@ -1,7 +1,14 @@
 import { useContext } from 'react';
 import styles from './Chats.module.scss';
 import { AuthContext } from '../../../context/AuthContext';
-import { doc, getDocs, setDoc } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from 'firebase/firestore';
 import { db } from '../../../Firebase';
 
 interface IProps {
@@ -33,12 +40,18 @@ const Chats = ({ chatUser, isSearched }: IProps) => {
           : chatUser.uid + currentUser.uid;
       console.log(combinedId);
       try {
-        const res = await getDocs(db, 'chats', combinedId);
+        const q = query(
+          collection(db, 'chats'),
+          where('uid', '==', combinedId)
+        );
 
-        if (!res.exists()) {
-          //create chat
-          await setDoc(doc, (db, 'chats', combinedId), { messages: [] });
-        }
+        const res = await getDocs(q);
+
+        // if (!res.exists()) {
+        //create chat
+        // await setDoc(doc, (db, 'chats', combinedId), { messages: [] });
+        // }
+        console.log(res);
       } catch (error) {
         console.log(error);
       }
