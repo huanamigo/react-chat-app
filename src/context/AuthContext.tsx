@@ -2,9 +2,21 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { createContext, useEffect, useState } from 'react';
 import { auth } from '../Firebase';
 
+interface IProps {
+  currentUser: {
+    photoURL?: string;
+    displayName?: string;
+  };
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<boolean>;
+}
+
 export const AuthContext = createContext({
   currentUser: {},
   isLoading: true,
+  setIsLoading: (data: boolean) => {
+    data;
+  },
 });
 
 export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -17,7 +29,6 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
     const unsub = onAuthStateChanged(auth, (user) => {
       user && setCurrentUser(user);
       setIsLoading(false);
-      // console.log(user);
     });
 
     return () => {
@@ -25,9 +36,13 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
     };
   }, [currentUser]);
 
+  const contextValue: IProps = {
+    currentUser,
+    isLoading,
+    setIsLoading,
+  };
+
   return (
-    <AuthContext.Provider value={{ currentUser, isLoading }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };

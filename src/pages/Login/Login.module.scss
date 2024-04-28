@@ -12,6 +12,8 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    width: 250px;
+    text-align: center;
 
     input {
       background-color: $inputBackground;
@@ -43,6 +45,7 @@
 
   .error {
     color: $whiteText;
+    max-width: 100%;
   }
 
   p {
