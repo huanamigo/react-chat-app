@@ -3,10 +3,10 @@ import styles from './Chats.module.scss';
 import { AuthContext } from '../../../context/AuthContext';
 import {
   collection,
-  doc,
+  // doc,
   getDocs,
   query,
-  setDoc,
+  // setDoc,
   where,
 } from 'firebase/firestore';
 import { db } from '../../../Firebase';
