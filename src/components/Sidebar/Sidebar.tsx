@@ -23,6 +23,7 @@ const Sidebar = () => {
     lastMessage: '',
     uid: '',
   });
+  const [userQuery, setUserQuery] = useState('');
 
   const [tempUser] = useState({
     username: 'temp',
@@ -52,9 +53,18 @@ const Sidebar = () => {
           Logout
         </button>
       </div>
-      <Search setSearchedUser={setSearchedUser} />
+      <Search
+        setSearchedUser={setSearchedUser}
+        userQuery={userQuery}
+        setUserQuery={setUserQuery}
+      />
       {searchedUser.username !== '' && (
-        <Chats chatUser={searchedUser} isSearched={true} />
+        <Chats
+          chatUser={searchedUser}
+          setSearchedUser={setSearchedUser}
+          isSearched={true}
+          setUserQuery={setUserQuery}
+        />
       )}
       <Chats chatUser={tempUser} />
     </div>

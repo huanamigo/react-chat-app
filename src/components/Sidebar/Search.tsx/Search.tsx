@@ -12,11 +12,11 @@ interface IProps {
       uid: string;
     }>
   >;
+  userQuery: string;
+  setUserQuery: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Search = ({ setSearchedUser }: IProps) => {
-  // const [userQuery, setUserQuery] = useState('');
-  // const [user, setUser] = useState(null);
+const Search = ({ setSearchedUser, userQuery, setUserQuery }: IProps) => {
   const [searchError, setSearchError] = useState('');
 
   const handleSearch = async (userQuery: string) => {
@@ -56,9 +56,10 @@ const Search = ({ setSearchedUser }: IProps) => {
         type="text"
         placeholder="Search email"
         onChange={(e) => {
-          // setUserQuery();
+          setUserQuery(e.target.value);
           handleSearch(e.target.value);
         }}
+        value={userQuery}
       />
       {searchError !== '' && <p>{searchError}</p>}
     </div>

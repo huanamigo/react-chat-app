@@ -2,12 +2,11 @@ import { useContext } from 'react';
 import styles from './Chats.module.scss';
 import { AuthContext } from '../../../context/AuthContext';
 import {
-  collection,
-  // doc,
-  getDocs,
-  query,
-  // setDoc,
-  where,
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
 } from 'firebase/firestore';
 import { db } from '../../../Firebase';
 
@@ -19,6 +18,15 @@ interface IProps {
     lastMessage: string;
     uid: string;
   };
+  setSearchedUser?: React.Dispatch<
+    React.SetStateAction<{
+      username: string;
+      img: string;
+      lastMessage: string;
+      uid: string;
+    }>
+  >;
+  setUserQuery?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface UserType {
@@ -29,7 +37,12 @@ interface UserType {
   };
 }
 
-const Chats = ({ chatUser, isSearched }: IProps) => {
+const Chats = ({
+  chatUser,
+  setSearchedUser,
+  isSearched,
+  setUserQuery,
+}: IProps) => {
   const { currentUser }: UserType = useContext(AuthContext);
 
   const handleSelect = async () => {
@@ -40,17 +53,38 @@ const Chats = ({ chatUser, isSearched }: IProps) => {
           : chatUser.uid + currentUser.uid;
       console.log(combinedId);
       try {
-        const q = query(
-          collection(db, 'chats'),
-          where('uid', '==', combinedId)
-        );
+        const res = await getDoc(doc(db, 'chats', combinedId));
 
-        const res = await getDocs(q);
+        if (!res.exists()) {
+          await setDoc(doc(db, 'chats', combinedId), { messages: [] });
 
-        // if (!res.exists()) {
-        //create chat
-        // await setDoc(doc, (db, 'chats', combinedId), { messages: [] });
-        // }
+          await updateDoc(doc(db, 'userChats', currentUser.uid), {
+            [combinedId + '.userInfo']: {
+              uid: chatUser.uid,
+              displayName: chatUser.username,
+              photoURL: chatUser.img,
+            },
+            [combinedId + '.date']: serverTimestamp(),
+          });
+
+          await updateDoc(doc(db, 'userChats', chatUser.uid), {
+            [combinedId + '.userInfo']: {
+              uid: currentUser.uid,
+              displayName: currentUser.displayName,
+              photoURL: currentUser.photoURL,
+            },
+            [combinedId + '.date']: serverTimestamp(),
+          });
+        }
+        if (isSearched) {
+          setSearchedUser!({
+            username: '',
+            img: '',
+            lastMessage: '',
+            uid: '',
+          });
+          setUserQuery!('');
+        }
         console.log(res);
       } catch (error) {
         console.log(error);
@@ -60,19 +94,24 @@ const Chats = ({ chatUser, isSearched }: IProps) => {
   };
 
   return (
-    <div className={styles.container}>
-      <img src={chatUser.img} />
+    <>
       {isSearched ? (
-        <div onClick={() => handleSelect()} className={styles.wrapper}>
-          <p className={styles.username}>{chatUser.username}</p>
+        <div onClick={() => handleSelect()} className={styles.container}>
+          <img src={chatUser.img} />
+          <div className={styles.wrapper}>
+            <p className={styles.username}>{chatUser.username}</p>
+          </div>
         </div>
       ) : (
-        <div className={styles.wrapper}>
-          <p className={styles.username}>{chatUser.username}</p>
-          <p className={styles.message}>{chatUser.lastMessage}</p>
+        <div className={styles.container}>
+          <img src={chatUser.img} />
+          <div className={styles.wrapper}>
+            <p className={styles.username}>{chatUser.username}</p>
+            <p className={styles.message}>{chatUser.lastMessage}</p>
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
