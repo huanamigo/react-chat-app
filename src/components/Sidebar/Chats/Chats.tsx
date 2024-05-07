@@ -1,9 +1,10 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styles from './Chats.module.scss';
 import { AuthContext } from '../../../context/AuthContext';
 import {
   doc,
   getDoc,
+  onSnapshot,
   serverTimestamp,
   setDoc,
   updateDoc,
@@ -37,6 +38,22 @@ interface UserType {
   };
 }
 
+type ChatArrayType = [
+  string,
+  {
+    userInfo: {
+      displayName: string;
+      photoURL: string;
+      uid: string;
+      lastMessage: string;
+    };
+    date: {
+      seconds: number;
+      nanoseconds: number;
+    };
+  }
+];
+
 const Chats = ({
   chatUser,
   setSearchedUser,
@@ -44,6 +61,23 @@ const Chats = ({
   setUserQuery,
 }: IProps) => {
   const { currentUser }: UserType = useContext(AuthContext);
+  const [chats, setChats] = useState({});
+
+  useEffect(() => {
+    if (currentUser?.uid) {
+      const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
+        const data = doc.data();
+        if (data !== undefined) {
+          setChats(data);
+          // console.log(Object.entries(data));
+        }
+      });
+
+      return () => {
+        unsub();
+      };
+    }
+  }, [currentUser.uid]);
 
   const handleSelect = async () => {
     if (currentUser.uid !== '' && currentUser.uid !== undefined) {
@@ -51,7 +85,6 @@ const Chats = ({
         currentUser.uid > chatUser.uid
           ? currentUser.uid + chatUser.uid
           : chatUser.uid + currentUser.uid;
-      console.log(combinedId);
       try {
         const res = await getDoc(doc(db, 'chats', combinedId));
 
@@ -103,13 +136,23 @@ const Chats = ({
           </div>
         </div>
       ) : (
-        <div className={styles.container}>
-          <img src={chatUser.img} />
-          <div className={styles.wrapper}>
-            <p className={styles.username}>{chatUser.username}</p>
-            <p className={styles.message}>{chatUser.lastMessage}</p>
-          </div>
-        </div>
+        <>
+          {(Object.entries(chats) as ChatArrayType[]).map(
+            (chat: ChatArrayType) => (
+              <div key={chat[0]} className={styles.container}>
+                <img src={chat[1].userInfo.photoURL} />
+                <div className={styles.wrapper}>
+                  <p className={styles.username}>
+                    {chat[1].userInfo.displayName}
+                  </p>
+                  <p className={styles.message}>
+                    {chat[1].userInfo.lastMessage}
+                  </p>
+                </div>
+              </div>
+            )
+          )}
+        </>
       )}
     </>
   );
