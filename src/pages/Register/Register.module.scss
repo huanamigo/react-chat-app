@@ -1,3 +1,5 @@
+@import '../../variables.scss';
+
 .container {
   height: 100vh;
   background-color: black;
@@ -10,12 +12,34 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    width: 250px;
+    text-align: center;
 
     input {
-      background-color: rgb(20, 20, 20);
+      background-color: $inputBackground;
       border: none;
-      color: white;
+      color: $whiteText;
       margin: 1rem;
+      padding: 1rem;
+      border-radius: 10px;
+      width: 100%;
+    }
+
+    button {
+      background-color: $mainColor;
+      color: $whiteText;
+      border: none;
+      margin: 1rem;
+      padding: 0.3rem;
+      border-radius: 10px;
+      width: 100%;
+      cursor: pointer;
+
+      transition: all ease-in 150ms;
+
+      &:hover {
+        background-color: $mainColorDarker;
+      }
     }
   }
 
