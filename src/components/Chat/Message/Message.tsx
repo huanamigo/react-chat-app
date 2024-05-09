@@ -8,7 +8,7 @@ interface IProps {
 const Message = ({ messageText, time }: IProps) => {
   return (
     <div className={styles.container}>
-      <span>{messageText}</span>
+      <p>{messageText}</p>
       <span className={styles.time}>{time}</span>
     </div>
   );

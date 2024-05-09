@@ -1,3 +1,5 @@
+@import '../../../variables.scss';
+
 .container {
   padding: 0.2rem 0.5rem;
   margin: 0.2rem;
@@ -8,10 +10,24 @@
   border-bottom-right-radius: 15px;
   border-top-left-radius: 15px;
   font-size: 16px;
-
+  max-width: 40vw;
+  
   .time {
     margin-left: 7px;
     color: rgb(160, 160, 160);
     font-size: 10px;
+    float: right;
+  }
+
+  p {
+    display: inline;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+@media (max-width: $sm-screen) {
+  .container {
+    max-width: 80vw;
   }
 }
