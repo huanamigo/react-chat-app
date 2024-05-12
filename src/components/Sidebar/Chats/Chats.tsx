@@ -10,6 +10,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { db } from '../../../Firebase';
+import { ChatContext } from '../../../context/ChatContext';
 
 interface IProps {
   isSearched?: boolean;
@@ -28,14 +29,6 @@ interface IProps {
     }>
   >;
   setUserQuery?: React.Dispatch<React.SetStateAction<string>>;
-}
-
-interface UserType {
-  currentUser: {
-    photoURL?: string;
-    displayName?: string;
-    uid?: string;
-  };
 }
 
 type ChatArrayType = [
@@ -60,7 +53,8 @@ const Chats = ({
   isSearched,
   setUserQuery,
 }: IProps) => {
-  const { currentUser }: UserType = useContext(AuthContext);
+  const { currentUser }: models.IUser = useContext(AuthContext);
+  const { dispatch }: models.IChatContext = useContext(ChatContext);
   const [chats, setChats] = useState({});
 
   useEffect(() => {
@@ -79,7 +73,7 @@ const Chats = ({
     }
   }, [currentUser.uid]);
 
-  const handleSelect = async () => {
+  const handleSearchSelect = async () => {
     if (currentUser.uid !== '' && currentUser.uid !== undefined) {
       const combinedId =
         currentUser.uid > chatUser.uid
@@ -126,10 +120,21 @@ const Chats = ({
     console.log(currentUser.uid + chatUser.uid);
   };
 
+  const handleSelect = (user: {
+    displayName: string;
+    photoURL: string;
+    uid: string;
+    lastMessage: string;
+  }) => {
+    if (dispatch) {
+      dispatch({ type: 'CHANGE_USER', payload: user });
+    }
+  };
+
   return (
     <>
       {isSearched ? (
-        <div onClick={() => handleSelect()} className={styles.container}>
+        <div onClick={() => handleSearchSelect()} className={styles.container}>
           <img src={chatUser.img} />
           <div className={styles.wrapper}>
             <p className={styles.username}>{chatUser.username}</p>
@@ -139,7 +144,11 @@ const Chats = ({
         <>
           {(Object.entries(chats) as ChatArrayType[]).map(
             (chat: ChatArrayType) => (
-              <div key={chat[0]} className={styles.container}>
+              <div
+                key={chat[0]}
+                className={styles.container}
+                onClick={() => handleSelect(chat[1].userInfo)}
+              >
                 <img src={chat[1].userInfo.photoURL} />
                 <div className={styles.wrapper}>
                   <p className={styles.username}>

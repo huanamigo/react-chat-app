@@ -7,16 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 
-interface UserType {
-  currentUser: {
-    photoURL?: string;
-    displayName?: string;
-  };
-}
-
 const Sidebar = () => {
   const navigate = useNavigate();
-  const { currentUser }: UserType = useContext(AuthContext);
+  const { currentUser }: models.IUser = useContext(AuthContext);
   const [searchedUser, setSearchedUser] = useState({
     username: '',
     img: '',

@@ -4,13 +4,16 @@ import App from './App.tsx';
 import './reset.css';
 import { HashRouter } from 'react-router-dom';
 import { AuthContextProvider } from './context/AuthContext.tsx';
+import { ChatContextProvider } from './context/ChatContext.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthContextProvider>
-      <HashRouter>
-        <App />
-      </HashRouter>
+      <ChatContextProvider>
+        <HashRouter>
+          <App />
+        </HashRouter>
+      </ChatContextProvider>
     </AuthContextProvider>
   </React.StrictMode>
 );
