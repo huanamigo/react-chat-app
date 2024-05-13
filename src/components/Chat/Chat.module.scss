@@ -6,12 +6,23 @@
   background-color: black;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: end;
+  justify-content: space-between;
+
+  .topbar {
+    width: 100%;
+    background-color: red;
+    height: 4em;
+  }
+
+  .messageWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: end;
+  }
 }
 
-
-@media (min-width: $sm-screen) and (max-width:$md-screen) {
+@media (min-width: $sm-screen) and (max-width: $md-screen) {
   .container {
     max-width: 50vw;
     z-index: 1;

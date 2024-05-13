@@ -9,6 +9,7 @@
     justify-content: space-between;
     align-items: center;
     color: $whiteText;
+    height: 4em;
 
     .logoutBtn {
       margin: 15px;
@@ -28,7 +29,7 @@
   }
 }
 
-@media (min-width: $sm-screen) and (max-width:$md-screen) {
+@media (min-width: $sm-screen) and (max-width: $md-screen) {
   .container {
     width: 50vw;
     z-index: 2;
