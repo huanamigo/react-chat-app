@@ -15,17 +15,17 @@ import { ChatContext } from '../../../context/ChatContext';
 interface IProps {
   isSearched?: boolean;
   chatUser: {
-    username: string;
-    img: string;
-    lastMessage: string;
+    displayName: string;
+    photoURL: string;
     uid: string;
+    lastMessage: string;
   };
   setSearchedUser?: React.Dispatch<
     React.SetStateAction<{
-      username: string;
-      img: string;
-      lastMessage: string;
+      displayName: string;
+      photoURL: string;
       uid: string;
+      lastMessage: string;
     }>
   >;
   setUserQuery?: React.Dispatch<React.SetStateAction<string>>;
@@ -88,8 +88,8 @@ const Chats = ({
           await updateDoc(doc(db, 'userChats', currentUser.uid), {
             [combinedId + '.userInfo']: {
               uid: chatUser.uid,
-              displayName: chatUser.username,
-              photoURL: chatUser.img,
+              displayName: chatUser.displayName,
+              photoURL: chatUser.photoURL,
             },
             [combinedId + '.date']: serverTimestamp(),
           });
@@ -105,8 +105,8 @@ const Chats = ({
         }
         if (isSearched) {
           setSearchedUser!({
-            username: '',
-            img: '',
+            displayName: '',
+            photoURL: '',
             lastMessage: '',
             uid: '',
           });
@@ -126,18 +126,22 @@ const Chats = ({
     uid: string;
     lastMessage: string;
   }) => {
-    if (dispatch) {
-      dispatch({ type: 'CHANGE_USER', payload: user });
-    }
+    dispatch!({ type: 'CHANGE_USER', payload: user });
   };
 
   return (
     <>
       {isSearched ? (
-        <div onClick={() => handleSearchSelect()} className={styles.container}>
-          <img src={chatUser.img} />
+        <div
+          onClick={() => {
+            handleSearchSelect();
+            handleSelect(chatUser);
+          }}
+          className={styles.container}
+        >
+          <img src={chatUser.photoURL} />
           <div className={styles.wrapper}>
-            <p className={styles.username}>{chatUser.username}</p>
+            <p className={styles.username}>{chatUser.displayName}</p>
           </div>
         </div>
       ) : (

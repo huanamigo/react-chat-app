@@ -11,17 +11,17 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const { currentUser }: models.IUser = useContext(AuthContext);
   const [searchedUser, setSearchedUser] = useState({
-    username: '',
-    img: '',
-    lastMessage: '',
+    displayName: '',
+    photoURL: '',
     uid: '',
+    lastMessage: '',
   });
   const [userQuery, setUserQuery] = useState('');
 
   const [tempUser] = useState({
-    username: 'temp',
-    img: 'https://source.unsplash.com/random',
-    lastMessage: 'jazda',
+    displayName: 'Temp User',
+    photoURL: 'https://source.unsplash.com/random',
+    lastMessage: 'Last message text',
     uid: 'qwertyuioQWERTYUIO',
   });
 
@@ -35,7 +35,6 @@ const Sidebar = () => {
           onClick={() => {
             signOut(auth)
               .then(() => {
-                console.log('WYLogoWANO');
                 navigate('../login', { replace: true });
               })
               .catch((error) => {
@@ -51,7 +50,7 @@ const Sidebar = () => {
         userQuery={userQuery}
         setUserQuery={setUserQuery}
       />
-      {searchedUser.username !== '' && (
+      {searchedUser.displayName !== '' && (
         <Chats
           chatUser={searchedUser}
           setSearchedUser={setSearchedUser}

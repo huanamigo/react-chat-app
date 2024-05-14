@@ -7,8 +7,6 @@ import { Navigate } from 'react-router-dom';
 
 const Home = () => {
   const { currentUser, isLoading } = useContext(AuthContext);
-  console.log(currentUser);
-  console.log(isLoading);
 
   if (isLoading) {
     return (

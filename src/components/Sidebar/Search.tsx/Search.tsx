@@ -6,8 +6,8 @@ import { useState } from 'react';
 interface IProps {
   setSearchedUser: React.Dispatch<
     React.SetStateAction<{
-      username: string;
-      img: string;
+      displayName: string;
+      photoURL: string;
       lastMessage: string;
       uid: string;
     }>
@@ -30,16 +30,16 @@ const Search = ({ setSearchedUser, userQuery, setUserQuery }: IProps) => {
           const docData = doc.data();
           console.log(docData);
           setSearchedUser({
-            username: docData.displayName,
-            img: docData.photoURL,
+            displayName: docData.displayName,
+            photoURL: docData.photoURL,
             lastMessage: '???',
             uid: docData.uid,
           });
         });
       } else {
         setSearchedUser({
-          username: '',
-          img: '',
+          displayName: '',
+          photoURL: '',
           lastMessage: '',
           uid: '',
         });

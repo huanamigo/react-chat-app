@@ -15,7 +15,10 @@ export const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const chatReducer = (
     state: unknown,
-    action: { type: string; payload: { uid: string } }
+    action: {
+      type: string;
+      payload: { photoURL: string; displayName: string; uid: string };
+    }
   ) => {
     if (action.type === 'CHANGE_USER') {
       if (currentUser.uid) {
@@ -35,7 +38,7 @@ export const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const [state, dispatch] = useReducer(chatReducer, InitialState);
 
   return (
-    <ChatContext.Provider value={{ state, dispatch }}>
+    <ChatContext.Provider value={{ data: state, dispatch }}>
       {children}
     </ChatContext.Provider>
   );

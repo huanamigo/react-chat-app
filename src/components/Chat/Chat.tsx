@@ -5,25 +5,25 @@ import MessageInput from './MessageInput/MessageInput';
 import { ChatContext } from '../../context/ChatContext';
 
 interface IUserFromContext {
-  user?: {
-    photoURL?: string;
-    displayName?: string;
-    uid?: string;
+  data?: {
+    user?: {
+      photoURL?: string;
+      displayName?: string;
+      uid?: string;
+    };
   };
 }
 
 const Chat = () => {
-  const { user }: IUserFromContext = useContext(ChatContext);
-
-  console.log(user);
+  const { data }: IUserFromContext = useContext(ChatContext);
 
   return (
     <div className={styles.container}>
       <div className={styles.topbar}>
-        {user ? (
+        {data?.user ? (
           <>
-            <img src={user.photoURL} alt="User photo" />
-            <p>{user.displayName}</p>
+            <img src={data.user.photoURL} alt="User photo" />
+            <p>{data.user.displayName}</p>
           </>
         ) : (
           <p>USER NOT FOUND</p>
