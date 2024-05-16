@@ -21,4 +21,15 @@ namespace models {
     isLoading: boolean;
     setIsLoading: React.Dispatch<boolean>;
   }
+
+  interface IUserFromContext {
+    data?: {
+      user?: {
+        photoURL?: string;
+        displayName?: string;
+        uid?: string;
+      };
+      chatId: string;
+    };
+  }
 }

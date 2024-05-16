@@ -21,6 +21,7 @@ export const ChatContextProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   ) => {
     if (action.type === 'CHANGE_USER') {
+      console.log(action.payload);
       if (currentUser.uid) {
         return {
           user: action.payload,

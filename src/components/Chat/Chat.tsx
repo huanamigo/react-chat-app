@@ -1,21 +1,28 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styles from './Chat.module.scss';
 import Message from './Message/Message';
 import MessageInput from './MessageInput/MessageInput';
 import { ChatContext } from '../../context/ChatContext';
-
-interface IUserFromContext {
-  data?: {
-    user?: {
-      photoURL?: string;
-      displayName?: string;
-      uid?: string;
-    };
-  };
-}
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../../Firebase';
 
 const Chat = () => {
-  const { data }: IUserFromContext = useContext(ChatContext);
+  const { data }: models.IUserFromContext = useContext(ChatContext);
+
+  const [messages, setMessages] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (data?.chatId) {
+      const unsub = onSnapshot(doc(db, 'chats', data.chatId), (doc) => {
+        doc.exists() && setMessages(doc.data().messages);
+        console.log(doc.data());
+      });
+
+      return () => {
+        unsub();
+      };
+    }
+  }, [data?.chatId]);
 
   return (
     <div className={styles.container}>
@@ -30,18 +37,9 @@ const Chat = () => {
         )}
       </div>
       <div className={styles.messageWrapper}>
-        <Message messageText="11111 1111 1111 1111111 1 111" time="15:40" />
-        <Message messageText="22222222222222222222" time="15:40" />
-        <Message
-          messageText="333333 3333333 3333333333 3333333 333"
-          time="15:40"
-        />
-        <Message messageText="444 44444 444 44444  44" time="15:40" />
-        <Message messageText="5555 5555555 5555 5555 555 5555" time="15:40" />
-        <Message
-          messageText="55555555555555555555555555555555555555"
-          time="15:40"
-        />
+        {messages.length < 0 &&
+          messages.map((m) => <Message messageText={m} time="15:40" />)}
+
         <MessageInput />
       </div>
     </div>
