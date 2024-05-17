@@ -29,7 +29,11 @@ const Chat = () => {
       <div className={styles.topbar}>
         {data?.user ? (
           <>
-            <img src={data.user.photoURL} alt="User photo" />
+            <img
+              src={data.user.photoURL}
+              alt="User photo"
+              onClick={() => console.log(data.user)}
+            />
             <p>{data.user.displayName}</p>
           </>
         ) : (
