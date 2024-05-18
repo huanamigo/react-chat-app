@@ -2,9 +2,12 @@
 
 .container {
   width: 100%;
+  display: flex;
+  align-items: center;
 
   .inputWrapper {
     position: relative;
+    width: calc(100% - 70px);
     input {
       width: calc(100% - 40px);
       border: none;
@@ -33,9 +36,17 @@
       font-size: 20px;
       padding: 0.5em;
     }
+  }
 
-    .sendBtn {
-      display: none;
-    }
+  .sendBtn {
+    height: 50px;
+    width: 50px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: $mainColor;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }

@@ -2,7 +2,7 @@
 
 .container {
   background-color: $secondaryBackground;
-  width: 25vw;
+  width: 30vw;
 
   .navbar {
     display: flex;
@@ -31,7 +31,7 @@
 
 @media (min-width: $sm-screen) and (max-width: $md-screen) {
   .container {
-    width: 50vw;
+    width: 40vw;
     z-index: 2;
     height: 100vh;
   }
@@ -41,7 +41,6 @@
   .container {
     width: 100vw;
     position: absolute;
-
     height: 100vh;
   }
 }

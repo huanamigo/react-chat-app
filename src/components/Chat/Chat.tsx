@@ -26,26 +26,30 @@ const Chat = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.topbar}>
-        {data?.user ? (
-          <>
-            <img
-              src={data.user.photoURL}
-              alt="User photo"
-              onClick={() => console.log(data.user)}
-            />
-            <p>{data.user.displayName}</p>
-          </>
-        ) : (
-          <p>USER NOT FOUND</p>
-        )}
-      </div>
-      <div className={styles.messageWrapper}>
-        {messages.length < 0 &&
-          messages.map((m) => <Message messageText={m} time="15:40" />)}
+      {data?.chatId !== '' ? (
+        <>
+          <div className={styles.topbar}>
+            {data?.user ? (
+              <>
+                <img
+                  src={data.user.photoURL}
+                  alt="User photo"
+                  onClick={() => console.log(data.user)}
+                />
+                <p>{data.user.displayName}</p>
+              </>
+            ) : (
+              <p>USER NOT FOUND</p>
+            )}
+          </div>
+          <div className={styles.messageWrapper}>
+            {messages.length < 0 &&
+              messages.map((m) => <Message messageText={m} time="15:40" />)}
 
-        <MessageInput />
-      </div>
+            <MessageInput />
+          </div>
+        </>
+      ) : null}
     </div>
   );
 };
