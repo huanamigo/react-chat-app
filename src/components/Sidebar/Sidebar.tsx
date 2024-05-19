@@ -59,7 +59,6 @@ const Sidebar = () => {
         />
       )}
       <Chats chatUser={tempUser} />
-      <button onClick={() => console.log(currentUser)}>ASD</button>
     </div>
   );
 };
