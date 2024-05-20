@@ -1,13 +1,71 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import styles from './MessageInput.module.scss';
+import { Timestamp, arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { db, storage } from '../../../Firebase';
+import { v4 as uuidv4 } from 'uuid';
+import { ChatContext } from '../../../context/ChatContext';
+import { AuthContext } from '../../../context/AuthContext';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
 const MessageInput = () => {
   const [text, setText] = useState('');
   const [file, setFile] = useState<File>();
+  const { data }: models.IUserFromContext = useContext(ChatContext);
+  const { currentUser }: models.IUser = useContext(AuthContext);
 
-  const handleSend = () => {
-    console.log(text);
+  const handleSend = async () => {
     console.log(file);
+    if (file) {
+      const storageRef = ref(storage, uuidv4());
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused');
+              break;
+            case 'running':
+              console.log('Upload is running');
+              break;
+          }
+        },
+        (error) => {
+          console.log(String(error));
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            if (data?.chatId) {
+              await updateDoc(doc(db, 'chats', data?.chatId), {
+                messages: arrayUnion({
+                  id: uuidv4(),
+                  text,
+                  senderId: currentUser.uid,
+                  date: Timestamp.now(),
+                  img: downloadURL,
+                }),
+              });
+            }
+          });
+        }
+      );
+      console.log(text);
+    } else {
+      console.log(data?.chatId);
+      if (data?.chatId) {
+        await updateDoc(doc(db, 'chats', data?.chatId), {
+          messages: arrayUnion({
+            id: uuidv4(),
+            text,
+            senderId: currentUser.uid,
+            date: Timestamp.now(),
+          }),
+        });
+      }
+    }
   };
 
   return (
