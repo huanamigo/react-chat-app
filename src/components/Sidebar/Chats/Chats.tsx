@@ -38,7 +38,9 @@ type ChatArrayType = [
       displayName: string;
       photoURL: string;
       uid: string;
-      lastMessage: string;
+    };
+    lastMessage: {
+      text: string;
     };
     date: {
       seconds: number;
@@ -124,7 +126,6 @@ const Chats = ({
     displayName: string;
     photoURL: string;
     uid: string;
-    lastMessage: string;
   }) => {
     dispatch!({ type: 'CHANGE_USER', payload: user });
   };
@@ -151,16 +152,19 @@ const Chats = ({
               <div
                 key={chat[0]}
                 className={styles.container}
-                onClick={() => handleSelect(chat[1].userInfo)}
+                onClick={() => {
+                  handleSelect(chat[1].userInfo);
+                  console.log(chat[1].lastMessage.text);
+                }}
               >
                 <img src={chat[1].userInfo.photoURL} />
                 <div className={styles.wrapper}>
                   <p className={styles.username}>
                     {chat[1].userInfo.displayName}
                   </p>
-                  <p className={styles.message}>
-                    {chat[1].userInfo.lastMessage}
-                  </p>
+                  {chat[1]?.lastMessage?.text !== undefined && (
+                    <p className={styles.message}>{chat[1].lastMessage.text}</p>
+                  )}
                 </div>
               </div>
             )

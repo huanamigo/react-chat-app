@@ -1,6 +1,12 @@
 import { useContext, useState } from 'react';
 import styles from './MessageInput.module.scss';
-import { Timestamp, arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import {
+  Timestamp,
+  arrayUnion,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from 'firebase/firestore';
 import { db, storage } from '../../../Firebase';
 import { v4 as uuidv4 } from 'uuid';
 import { ChatContext } from '../../../context/ChatContext';
@@ -52,6 +58,27 @@ const MessageInput = () => {
           });
         }
       );
+
+      if (currentUser.uid) {
+        await updateDoc(doc(db, 'userChats', currentUser.uid), {
+          [data?.chatId + '.lastMessage']: {
+            text,
+          },
+          [data?.chatId + '.date']: serverTimestamp(),
+        });
+      }
+
+      if (data && data.user?.uid) {
+        await updateDoc(doc(db, 'userChats', data.user?.uid), {
+          [data?.chatId + '.lastMessage']: {
+            text,
+          },
+          [data?.chatId + '.date']: serverTimestamp(),
+        });
+      }
+      setFile(undefined);
+      setText('');
+
       console.log(text);
     } else {
       console.log(data?.chatId);
@@ -65,6 +92,25 @@ const MessageInput = () => {
           }),
         });
       }
+
+      if (currentUser.uid) {
+        await updateDoc(doc(db, 'userChats', currentUser.uid), {
+          [data?.chatId + '.lastMessage']: {
+            text,
+          },
+          [data?.chatId + '.date']: serverTimestamp(),
+        });
+      }
+
+      if (data && data.user?.uid) {
+        await updateDoc(doc(db, 'userChats', data.user?.uid), {
+          [data?.chatId + '.lastMessage']: {
+            text,
+          },
+          [data?.chatId + '.date']: serverTimestamp(),
+        });
+      }
+      setText('');
     }
   };
 
@@ -84,6 +130,7 @@ const MessageInput = () => {
         </label>
         <input
           className={styles.textInput}
+          value={text}
           onChange={(e) => setText(e.target.value)}
         />
         <input
