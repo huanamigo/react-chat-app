@@ -12,6 +12,9 @@ const Chat = () => {
   const [messages, setMessages] = useState<string[]>([]);
 
   useEffect(() => {
+    {
+      messages.length > 0 && messages.map((m) => console.log(m));
+    }
     if (data?.chatId) {
       const unsub = onSnapshot(doc(db, 'chats', data.chatId), (doc) => {
         doc.exists() && setMessages(doc.data().messages);
@@ -39,8 +42,10 @@ const Chat = () => {
             )}
           </div>
           <div className={styles.messageWrapper}>
-            {messages.length < 0 &&
-              messages.map((m) => <Message messageText={m} time="15:40" />)}
+            {messages.length > 0 &&
+              messages.map((m) => (
+                <Message messageText={m.text} time="15:40" />
+              ))}
 
             <MessageInput />
           </div>
