@@ -6,20 +6,32 @@ import { ChatContext } from '../../context/ChatContext';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../../Firebase';
 
+interface IMessage {
+  text: string;
+  id: string;
+  senderId: string;
+  date: {
+    nanoseconds: number;
+    seconds: number;
+  };
+}
+
 const Chat = () => {
   const { data }: models.IUserFromContext = useContext(ChatContext);
 
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
 
   useEffect(() => {
-    {
-      messages.length > 0 && messages.map((m) => console.log(m));
-    }
     if (data?.chatId) {
       const unsub = onSnapshot(doc(db, 'chats', data.chatId), (doc) => {
         doc.exists() && setMessages(doc.data().messages);
         console.log(doc.data());
       });
+
+      // {
+      //   messages.length > 0 &&
+      //     messages.map((m: IMessage) => console.log(m.text));
+      // }
 
       return () => {
         unsub();
@@ -43,8 +55,12 @@ const Chat = () => {
           </div>
           <div className={styles.messageWrapper}>
             {messages.length > 0 &&
-              messages.map((m) => (
-                <Message messageText={m.text} time="15:40" />
+              messages.map((message) => (
+                <Message
+                  messageText={message.text}
+                  key={message.id}
+                  time="21:15"
+                />
               ))}
 
             <MessageInput />
