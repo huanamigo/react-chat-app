@@ -59,6 +59,7 @@ const Chat = () => {
                 <Message
                   messageText={message.text}
                   key={message.id}
+                  senderId={message.senderId}
                   time="21:15"
                 />
               ))}

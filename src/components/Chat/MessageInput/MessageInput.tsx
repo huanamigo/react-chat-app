@@ -21,97 +21,101 @@ const MessageInput = () => {
 
   const handleSend = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(file);
-    if (file) {
-      const storageRef = ref(storage, uuidv4());
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log('Upload is ' + progress + '% done');
-          switch (snapshot.state) {
-            case 'paused':
-              console.log('Upload is paused');
-              break;
-            case 'running':
-              console.log('Upload is running');
-              break;
-          }
-        },
-        (error) => {
-          console.log(String(error));
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            if (data?.chatId) {
-              await updateDoc(doc(db, 'chats', data?.chatId), {
-                messages: arrayUnion({
-                  id: uuidv4(),
-                  text,
-                  senderId: currentUser.uid,
-                  date: Timestamp.now(),
-                  img: downloadURL,
-                }),
-              });
+    if (text !== '') {
+      console.log(file);
+      if (file) {
+        const storageRef = ref(storage, uuidv4());
+        const uploadTask = uploadBytesResumable(storageRef, file);
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            switch (snapshot.state) {
+              case 'paused':
+                console.log('Upload is paused');
+                break;
+              case 'running':
+                console.log('Upload is running');
+                break;
             }
+          },
+          (error) => {
+            console.log(String(error));
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then(
+              async (downloadURL) => {
+                if (data?.chatId) {
+                  await updateDoc(doc(db, 'chats', data?.chatId), {
+                    messages: arrayUnion({
+                      id: uuidv4(),
+                      text,
+                      senderId: currentUser.uid,
+                      date: Timestamp.now(),
+                      img: downloadURL,
+                    }),
+                  });
+                }
+              }
+            );
+          }
+        );
+
+        if (currentUser.uid) {
+          await updateDoc(doc(db, 'userChats', currentUser.uid), {
+            [data?.chatId + '.lastMessage']: {
+              text,
+            },
+            [data?.chatId + '.date']: serverTimestamp(),
           });
         }
-      );
 
-      if (currentUser.uid) {
-        await updateDoc(doc(db, 'userChats', currentUser.uid), {
-          [data?.chatId + '.lastMessage']: {
-            text,
-          },
-          [data?.chatId + '.date']: serverTimestamp(),
-        });
-      }
+        if (data && data.user?.uid) {
+          await updateDoc(doc(db, 'userChats', data.user?.uid), {
+            [data?.chatId + '.lastMessage']: {
+              text,
+            },
+            [data?.chatId + '.date']: serverTimestamp(),
+          });
+        }
+        setFile(undefined);
+        setText('');
 
-      if (data && data.user?.uid) {
-        await updateDoc(doc(db, 'userChats', data.user?.uid), {
-          [data?.chatId + '.lastMessage']: {
-            text,
-          },
-          [data?.chatId + '.date']: serverTimestamp(),
-        });
-      }
-      setFile(undefined);
-      setText('');
+        console.log(text);
+      } else {
+        console.log(data?.chatId);
+        if (data?.chatId) {
+          await updateDoc(doc(db, 'chats', data?.chatId), {
+            messages: arrayUnion({
+              id: uuidv4(),
+              text,
+              senderId: currentUser.uid,
+              date: Timestamp.now(),
+            }),
+          });
+        }
 
-      console.log(text);
-    } else {
-      console.log(data?.chatId);
-      if (data?.chatId) {
-        await updateDoc(doc(db, 'chats', data?.chatId), {
-          messages: arrayUnion({
-            id: uuidv4(),
-            text,
-            senderId: currentUser.uid,
-            date: Timestamp.now(),
-          }),
-        });
-      }
+        if (currentUser.uid) {
+          await updateDoc(doc(db, 'userChats', currentUser.uid), {
+            [data?.chatId + '.lastMessage']: {
+              text,
+            },
+            [data?.chatId + '.date']: serverTimestamp(),
+          });
+        }
 
-      if (currentUser.uid) {
-        await updateDoc(doc(db, 'userChats', currentUser.uid), {
-          [data?.chatId + '.lastMessage']: {
-            text,
-          },
-          [data?.chatId + '.date']: serverTimestamp(),
-        });
+        if (data && data.user?.uid) {
+          await updateDoc(doc(db, 'userChats', data.user?.uid), {
+            [data?.chatId + '.lastMessage']: {
+              text,
+            },
+            [data?.chatId + '.date']: serverTimestamp(),
+          });
+        }
+        setText('');
       }
-
-      if (data && data.user?.uid) {
-        await updateDoc(doc(db, 'userChats', data.user?.uid), {
-          [data?.chatId + '.lastMessage']: {
-            text,
-          },
-          [data?.chatId + '.date']: serverTimestamp(),
-        });
-      }
-      setText('');
     }
   };
 
