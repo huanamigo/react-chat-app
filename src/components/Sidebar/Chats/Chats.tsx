@@ -64,8 +64,19 @@ const Chats = ({
       const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
         const data = doc.data();
         if (data !== undefined) {
-          setChats(data);
-          // console.log(Object.entries(data));
+          setChats(
+            (Object.entries(data) as ChatArrayType[]).sort((a, b) => {
+              if (b[1].date !== null && a[1].date !== null) {
+                return b[1].date.seconds - a[1].date.seconds;
+              }
+              // } else if (b[1].date !== null) {
+              //   return b[1].date.seconds;
+              // } else {
+              //   return a[1].date.seconds;
+              // }
+            })
+          );
+          console.log(Object.entries(data));
         }
       });
 
@@ -153,11 +164,11 @@ const Chats = ({
                 key={chat[0]}
                 className={styles.container}
                 onClick={() => {
-                  handleSelect(chat[1].userInfo);
-                  console.log(chat[1].lastMessage.text);
+                  // handleSelect(chat[1].userInfo);
+                  console.log(chat);
                 }}
               >
-                <img src={chat[1].userInfo.photoURL} />
+                {/* <img src={chat[1].userInfo.photoURL} />
                 <div className={styles.wrapper}>
                   <p className={styles.username}>
                     {chat[1].userInfo.displayName}
@@ -165,7 +176,7 @@ const Chats = ({
                   {chat[1]?.lastMessage?.text !== undefined && (
                     <p className={styles.message}>{chat[1].lastMessage.text}</p>
                   )}
-                </div>
+                </div> */}
               </div>
             )
           )}
