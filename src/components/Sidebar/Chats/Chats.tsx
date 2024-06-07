@@ -65,18 +65,33 @@ const Chats = ({
         const data = doc.data();
         if (data !== undefined) {
           setChats(
+            // (data as ChatArrayType[]).sort((a, b) => {
+            //   if (b[1].date !== null && a[1].date !== null) {
+            //     return b[1].date.seconds - a[1].date.seconds;
+            //   } else if (b[1].date !== null) {
+            //     return b[1].date.seconds;
+            //   } else {
+            //     return a[1].date.seconds;
+            //   }
+            // })
+            data
+          );
+          // console.log(
+          //   Object.entries(data).map((chat) => {
+          //     return chat[1];
+          //   })
+          // );
+          console.log(
             (Object.entries(data) as ChatArrayType[]).sort((a, b) => {
               if (b[1].date !== null && a[1].date !== null) {
                 return b[1].date.seconds - a[1].date.seconds;
+              } else if (b[1].date !== null) {
+                return b[1].date.seconds;
+              } else {
+                return a[1].date.seconds;
               }
-              // } else if (b[1].date !== null) {
-              //   return b[1].date.seconds;
-              // } else {
-              //   return a[1].date.seconds;
-              // }
             })
           );
-          console.log(Object.entries(data));
         }
       });
 
@@ -158,17 +173,26 @@ const Chats = ({
         </div>
       ) : (
         <>
-          {(Object.entries(chats) as ChatArrayType[]).map(
-            (chat: ChatArrayType) => (
+          {(Object.entries(chats) as ChatArrayType[])
+            .sort((a, b) => {
+              if (b[1].date !== null && a[1].date !== null) {
+                return b[1].date.seconds - a[1].date.seconds;
+              } else if (b[1].date !== null) {
+                return b[1].date.seconds;
+              } else {
+                return a[1].date.seconds;
+              }
+            })
+            .map((chat: ChatArrayType) => (
               <div
                 key={chat[0]}
                 className={styles.container}
                 onClick={() => {
-                  // handleSelect(chat[1].userInfo);
+                  handleSelect(chat[1].userInfo);
                   console.log(chat);
                 }}
               >
-                {/* <img src={chat[1].userInfo.photoURL} />
+                <img src={chat[1].userInfo.photoURL} />
                 <div className={styles.wrapper}>
                   <p className={styles.username}>
                     {chat[1].userInfo.displayName}
@@ -176,10 +200,9 @@ const Chats = ({
                   {chat[1]?.lastMessage?.text !== undefined && (
                     <p className={styles.message}>{chat[1].lastMessage.text}</p>
                   )}
-                </div> */}
+                </div>
               </div>
-            )
-          )}
+            ))}
         </>
       )}
     </>

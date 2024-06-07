@@ -14,12 +14,24 @@ const Message = ({ messageText, time, senderId }: IProps) => {
   return (
     <>
       {currentUser.uid === senderId ? (
-        <div className={`${styles.ownMessage} ${styles.container}`}>
+        <div
+          onClick={() => {
+            console.log(currentUser.uid);
+            console.log(senderId);
+          }}
+          className={`${styles.ownMessage} ${styles.container}`}
+        >
           <span className={styles.time}>{time}</span>
           <p>{messageText}</p>
         </div>
       ) : (
-        <div className={`${styles.container} ${styles.notMyMessage}`}>
+        <div
+          onClick={() => {
+            console.log(currentUser.uid);
+            console.log(senderId);
+          }}
+          className={`${styles.container} ${styles.notMyMessage}`}
+        >
           <p>{messageText}</p>
           <span className={styles.time}>{time}</span>
         </div>

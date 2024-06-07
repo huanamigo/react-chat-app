@@ -22,7 +22,7 @@ const Register = () => {
     try {
       const res = createUserWithEmailAndPassword(auth, email, password);
 
-      const storageRef = ref(storage, displayName);
+      const storageRef = ref(storage, email);
 
       if (file) {
         const uploadTask = uploadBytesResumable(storageRef, file);
@@ -87,8 +87,8 @@ const Register = () => {
           autoComplete="new-password"
           placeholder="Confirm password"
         />
-        <input type="file" />
-        <button>Sign Up</button>
+        <input type="file" required />
+        <button type="submit">Sign Up</button>
         {error !== '' && (
           <span className={styles.error}>Something went wrong</span>
         )}

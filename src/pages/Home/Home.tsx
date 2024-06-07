@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Chat from '../../components/Chat/Chat';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import styles from './Home.module.scss';
@@ -7,6 +7,11 @@ import { Navigate } from 'react-router-dom';
 
 const Home = () => {
   const { currentUser, isLoading } = useContext(AuthContext);
+  const [user, setUser] = useState(currentUser);
+
+  useEffect(() => {
+    setUser(currentUser);
+  }, [currentUser, user]);
 
   if (isLoading) {
     return (

@@ -87,6 +87,8 @@ const MessageInput = () => {
       } else {
         console.log(data?.chatId);
         if (data?.chatId) {
+          console.log('90');
+
           await updateDoc(doc(db, 'chats', data?.chatId), {
             messages: arrayUnion({
               id: uuidv4(),
@@ -98,6 +100,8 @@ const MessageInput = () => {
         }
 
         if (currentUser.uid) {
+          console.log('103');
+
           await updateDoc(doc(db, 'userChats', currentUser.uid), {
             [data?.chatId + '.lastMessage']: {
               text,
@@ -107,6 +111,8 @@ const MessageInput = () => {
         }
 
         if (data && data.user?.uid) {
+          console.log('114');
+
           await updateDoc(doc(db, 'userChats', data.user?.uid), {
             [data?.chatId + '.lastMessage']: {
               text,
